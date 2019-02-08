@@ -4,7 +4,6 @@ import numpy as np
 import random
 import multiprocessing as mp
 
-
 def unique(x):
     unique_list=[]
     for i in x:
@@ -39,28 +38,32 @@ def sample(k,possible):
     return com
 
 pool = mp.Pool(mp.cpu_count())
-L = 10
-n = 3
-k = 4
-p= 0.05
-numlist = enumerate_list(L=L,n=n)
-possible = possible_options(L=L,n=n,numlist=numlist)
 
-com_list = [pool.apply(sample, args=(k,possible)) for x in range(0,10000)]
+def base_function(L,n,p,k):
+    numlist = enumerate_list(L=L,n=n)
+    possible = possible_options(L=L,n=n,numlist=numlist)
+    if k >= 200:
+        iter=1000
+    else:
+        iter= 100000
+    com_list = [pool.apply(sample, args=(k,possible)) for x in range(0,iter)]
+    lengths=[len(x) for x in com_list]
+    total_list=[]
+    for x in range(n,L+1):
+        n_comb=lengths.count(x)
+        proportion=n_comb/len(lengths)
+        #proportion=round(proportion,3)
+        sequenced_error=proportion*(x)*(p)
+        non_sequenced_error=proportion*(L-x)*(1-0.25)
+        summation=sequenced_error+non_sequenced_error
+        total_list.append(summation)
+        #print(sequenced_error)
+        #print(non_sequenced_error)
+    total_list=sum(total_list)
+    return total_list
 
-lengths=[len(x) for x in com_list]
-
-total_list=[]
-for x in range(n,L+1):
-    n_comb=lengths.count(x)
-    proportion=n_comb/len(lengths)
-    #proportion=round(proportion,3)
-    sequenced_error=proportion*(x)*(p)
-    non_sequenced_error=proportion*(L-x)*(1-0.25)
-    summation=sequenced_error+non_sequenced_error
-    total_list.append(summation)
-    print(x, "  ", proportion)
-    #print(sequenced_error)
-    #print(non_sequenced_error)
-total_list=sum(total_list)
-print(total_list)
+with open("test2.txt") as f:
+    for line in f:
+        line = line.split(" ")
+        n = base_function(L=int(line[0]),n=int(line[1]),p=float(line[2]),k=int(line[3]))
+        print(n)
