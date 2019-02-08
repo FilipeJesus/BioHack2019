@@ -38,26 +38,29 @@ def sample(k,possible):
     com=unique(x=com)
     return com
 
-L = 31
-n = 5
-k = 43
+pool = mp.Pool(mp.cpu_count())
+L = 10
+n = 3
+k = 4
+p= 0.05
 numlist = enumerate_list(L=L,n=n)
 possible = possible_options(L=L,n=n,numlist=numlist)
 
-
-pool = mp.Pool(mp.cpu_count())
-print(mp.cpu_count())
-
-#com_list=[]
-#counter=0
-
 com_list = [pool.apply(sample, args=(k,possible)) for x in range(0,10000)]
 
-#while counter <= 100:
-#    com = sampling(k=k,possible=possible)
-#    com_list.append(com)
-#    counter = counter + 1
-
 lengths=[len(x) for x in com_list]
-tmp=[lengths.count(x) for x in range(n,L+1)]
-print(tmp)
+
+total_list=[]
+for x in range(n,L+1):
+    n_comb=lengths.count(x)
+    proportion=n_comb/len(lengths)
+    #proportion=round(proportion,3)
+    sequenced_error=proportion*(x)*(p)
+    non_sequenced_error=proportion*(L-x)*(1-0.25)
+    summation=sequenced_error+non_sequenced_error
+    total_list.append(summation)
+    print(x, "  ", proportion)
+    #print(sequenced_error)
+    #print(non_sequenced_error)
+total_list=sum(total_list)
+print(total_list)
