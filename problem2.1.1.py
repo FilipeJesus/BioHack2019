@@ -48,22 +48,30 @@ def base_function(L,n,p,k):
         iter= 100000
     com_list = [pool.apply(sample, args=(k,possible)) for x in range(0,iter)]
     lengths=[len(x) for x in com_list]
-    total_list=[]
-    for x in range(n,L+1):
-        n_comb=lengths.count(x)
-        proportion=n_comb/len(lengths)
+    #total_list=[]
+    #for x in range(n,L+1):
+        #n_comb=lengths.count(x)
+        #proportion=n_comb/len(lengths)
         #proportion=round(proportion,3)
-        sequenced_error=proportion*(x)*(p)
-        non_sequenced_error=proportion*(L-x)*(1-0.25)
-        summation=sequenced_error+non_sequenced_error
-        total_list.append(summation)
+        #sequenced_error=proportion*(x)*(p)
+        #non_sequenced_error=proportion*(L-x)*(1-0.25)
+        #summation=sequenced_error+non_sequenced_error
+        #total_list.append(n_comb)
         #print(sequenced_error)
         #print(non_sequenced_error)
-    total_list=sum(total_list)
+    #total_list=sum(total_list)
+    total_list=sum(lengths)/len(lengths)
     return total_list
+#8573 31 0.088 100
+L=8573
+n=31
+p=0.088
+k=100
+n = base_function(L=L,n=n,p=p,k=k)
+print(n)
 
-with open("test2.txt") as f:
-    for line in f:
-        line = line.split(" ")
-        n = base_function(L=int(line[0]),n=int(line[1]),p=float(line[2]),k=int(line[3]))
-        print(n)
+#with open("test2.txt") as f:
+#    for line in f:
+#        line = line.split(" ")
+#        n = base_function(L=int(line[0]),n=int(line[1]),p=float(line[2]),k=int(line[3]))
+#        print(n)

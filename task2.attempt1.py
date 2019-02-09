@@ -62,15 +62,15 @@ def create_final_matrix(L,n,k,p,joined):
     for x in range(0,len(nump_array)):
         tmp2.append([tmp[2*x],tmp[(2*x)+1]])
     tmp=tmp2
-    num_of_error=[]
-    for x in tmp:
-        n_comb=x[0]
-        sequenced_error=(n_comb)*(p)
-        non_sequenced_error=(L-n_comb)*(1-0.25)
-        num_of_error.append(sequenced_error+non_sequenced_error)
-    tmp2=[]
-    [tmp2.append([num_of_error[x],tmp[x][1]]) for x in range(0,len(num_of_error))]
-    return tmp2
+    #num_of_error=[]
+    #for x in tmp:
+    #    n_comb=x[0]
+    #    sequenced_error=(n_comb)*(p)
+    #    non_sequenced_error=(L-n_comb)*(1-0.25)
+    #    num_of_error.append(sequenced_error+non_sequenced_error)
+    #tmp2=[]
+    #[tmp2.append([num_of_error[x],tmp[x][1]]) for x in range(0,len(num_of_error))]
+    return tmp
 
 def base_function(L,n,p,k):
     numlist = enumerate_list(L=L,n=n)
@@ -80,8 +80,11 @@ def base_function(L,n,p,k):
     final = create_final_matrix(L=L,n=n,k=k,p=p,joined=joined)
     return final
 
-with open("test2.txt") as f:
-    for line in f:
-    line = line.split(" ")
-    n = create_final_matrix(L=int(line[0]),n=int(line[1]),p=float(line[2]),k=int(line[3]))
-    print(sum([x[0]*x[1] for x in n]))
+n = base_function(L=10,n=3,p=0.05,k=4)
+print(n)
+
+#with open("test2.txt") as f:
+#    for line in f:
+#    line = line.split(" ")
+#    n = create_final_matrix(L=int(line[0]),n=int(line[1]),p=float(line[2]),k=int(line[3]))
+#    print(sum([x[0]*x[1] for x in n]))
